@@ -1,0 +1,27 @@
+# github action to create or update an ad hoc environment
+name: '[k6] load test'
+run-name: '[k6] load tests for ${{ inputs.url }}'
+
+on:
+  workflow_dispatch:
+    inputs:
+      URL:
+        description: 'URL to use for load test'
+        required: true
+        type: string
+
+jobs:
+  k6_load_test:
+    name: k6 Load Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run local k6 test
+        uses: grafana/k6-action@v0.3.1
+        env:
+          BASE_URL: ${{ inputs.URL }}
+        with:
+          filename: k6/script.js
